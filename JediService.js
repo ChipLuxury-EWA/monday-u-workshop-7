@@ -6,8 +6,8 @@ async function replaceJedi(jediId, jedi, res) {
     const jediArray = await readJediFile();
     const index = jediArray.findIndex((item) => item.id == jediId);
     if (index === -1) {
-        res.status(404).json("Id not found")
-        return
+        res.status(404).json("Id not found");
+        return;
     } else {
         jediArray[index] = jedi;
         writeJediFile(jediArray);
@@ -20,10 +20,10 @@ async function deleteJedi(jediId, res) {
     const jediArray = await readJediFile();
     const index = jediArray.findIndex((item) => item.id == jediId);
     if (index === -1) {
-        res.status(404).json("Id not found")
-        return
+        res.status(404).json("Id not found");
+        return;
     } else {
-        jediArray.splice(index, 1)
+        jediArray[index].deleted = true;
         writeJediFile(jediArray);
         return jediArray;
     }
@@ -51,10 +51,16 @@ async function getJedi(id) {
     return data.find((value) => value.id === id);
 }
 
-async function readJediFile() {
+async function readJediFile(undo = false) {
     try {
         const data = await fs.readFileSync(jediFile);
-        return JSON.parse(data.toString());
+        const jedisArray = JSON.parse(data.toString());
+        if (undo) {
+            
+        } else {
+            const jedis = jedisArray.filter((jedi) => jedi.deleted !== true);
+            return jedis;
+        }
     } catch (error) {
         console.error(`Got an error trying to read the file: ${error.message}`);
     }
