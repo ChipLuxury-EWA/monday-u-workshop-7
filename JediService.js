@@ -83,6 +83,21 @@ async function writeJediFile(content) {
     }
 }
 
+async function joinTheDarkSide() {
+    const jedisArray = await readJediFile();
+    const theForceIndex = jedisArray.findIndex(
+        (jedi) => jedi.name === "Anakin Skywalker"
+    );
+    const theDarkSideIndex = jedisArray.findIndex(
+        (jedi) => jedi.name === "Darth Vader"
+    );
+    
+    // [jedisArray[theForceIndex], jedisArray[theDarkSideIndex]] = [jedisArray[theDarkSideIndex], jedisArray[theDarkSideIndex]]
+    jedisArray[theForceIndex] = jedisArray[theDarkSideIndex]
+
+    return jedisArray;
+}
+
 export default {
     addJedi,
     getJedi,
@@ -90,4 +105,5 @@ export default {
     replaceJedi,
     deleteJedi,
     undoDeleteJedi,
+    joinTheDarkSide,
 };

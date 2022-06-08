@@ -37,19 +37,27 @@ router
         res.status(200).json(jedi);
     })
     .post()
-    .put(async (req, res) => {
-        const ans = await api.replaceJedi(req.params.id, req.body, res);
-        res.status(200).json(ans);
+    .put(async (req, res, next) => {
+        if (isNaN(req.params.id)) next();
+        else {
+            const ans = await api.replaceJedi(req.params.id, req.body, res);
+            res.status(200).json(ans);
+        }
     })
     .delete(async (req, res) => {
         const ans = await api.deleteJedi(req.params.id, res);
         res.status(200).json(ans);
     });
 
-router.route("/:id/undo")
-    .delete(async (req, res) => {
-        const ans = await api.undoDeleteJedi(req.params.id, res);
-        res.status(200).json(ans);
-    });
+router.route("/:id/undo").delete(async (req, res) => {
+    const ans = await api.undoDeleteJedi(req.params.id, res);
+    res.status(200).json(ans);
+});
+
+router.route("/dark_side").put(async (req, res) => {
+    console.log("Join the dark side!");
+    const ans = await api.joinTheDarkSide();
+    res.status(200).json(ans);
+});
 
 export default router;
