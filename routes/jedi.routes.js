@@ -48,7 +48,7 @@ router
 
 router.route("/:id/undo")
     .delete(async (req, res) => {
-        const ans = await api.unDeleteJedi(req.params.id, res);
+        const ans = await api.undoDeleteJedi(req.params.id, res);
         res.status(200).json(ans);
     });
 
